@@ -1,3 +1,272 @@
+* {
+	box-sizing: border-box; // outline: 1px solid red;
+	text-align: center;
+	border-spacing: 0;
+	margin: 0;
+	padding: 0;
+	text-decoration: none;
+	list-style-type: none;
+}
+
 body {
-  background-color: black;
+	height: 1000px;
+}
+
+//Define class
+$className: calendar;
+$btnColor: #e10500;
+$btnBgC: rgb(237, 233, 222);
+$txtColor: #666;
+$distableedbgc: #f8f8f8;
+$greenTagColor: #66bb3c; //active class
+$hightLightColor: #ede9dd;
+//active js
+.active {
+	background-color: white;
+}
+
+.activetxtColor {
+	color: $btnColor;
+}
+
+.onClickDate {
+	border: 2px solid $greenTagColor !important;
+}
+
+.activeBorderColor {
+	border: 2px solid $greenTagColor;
+}
+
+.switchBtn {
+	width: 50px;
+	position: absolute;
+	left: 50%;
+	background-color: lightgray;
+	cursor: pointer;
+}
+
+.#{$className}.#{$className}_daymode {
+	width: 50%;
+	height: 680px;
+	text-align: center;
+	border: 1px solid lightgray;
+	& .#{$className}_tabWrap {
+		background-color: $btnBgC;
+		width: 100%;
+		.tabBox {
+			height: 50px;
+			width: 100%;
+			overflow: hidden;
+			div,
+			span {
+				display: inline-block;
+			}
+		}
+		.btn {
+			cursor: pointer;
+			font-size: 25px;
+			width: 3%;
+			i {
+				color: $btnColor;
+			}
+		}
+		.tab1,
+		.tab2,
+		.tab3 {
+			cursor: pointer;
+			color: $txtColor;
+			font-size: 17px;
+			width: 30%;
+			padding-bottom: 10px;
+			position: relative;
+		}
+		.tab1 {
+			// position: absolute;
+		}
+	}
+	& .#{$className}_weeksWrap {
+		width: 100%;
+		color: $txtColor;
+		font-weight: 800;
+		span {
+			display: inline-block;
+			width: 14.2%;
+			margin-left: -4px;
+			font-size: 16px;
+		}
+	}
+	& .#{$className}_daysWrap {
+		//day
+		width: 100%;
+		.disabled {
+			background-color: #f8f8f8;
+		}
+		.#{$className}_days {
+			height: 100px;
+			padding: 3px;
+			width: 14.2%;
+			border-top: 1px solid lightgray;
+			display: inline-block; // outline  : 1px solid gray;
+			border-left: 1px solid lightgray;
+			float: left;
+			font-size: 12px;
+			position: relative;
+			.GuaranteedTripTag {
+				position: absolute;
+				right: 0;
+				top: 0;
+				background-color: $greenTagColor;
+				color: white;
+			}
+			div {
+				text-align: left;
+			}
+			span {
+				display: inline-block;
+			}
+			.status {
+				color: #24a07c;
+			}
+			.status_orange {
+				color: orange;
+			}
+			.sell {
+				color: #666;
+			}
+			.group {
+				color: #666;
+			}
+			.price {
+				color: $btnColor;
+				font-weight: 800;
+			}
+			.weekDay {
+				color: red;
+				display: none;
+			}
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+.#{$className}.#{$className}_listmode {
+	width: 50%;
+	text-align: center;
+	border: 1px solid lightgray;
+	li {
+		// margin: 10px 0;
+		position: relative;
+		border-bottom: 1px solid lightgray;
+	}
+	.GuaranteedTripTag {
+		position: absolute;
+		left: 12%;
+		top: 60%;
+		background-color: $greenTagColor;
+		color: white;
+	}
+	& .#{$className}_tabWrap {
+		background-color: $btnBgC;
+		width: 100%;
+		.tabBox {
+			height: 50px;
+			width: 100%;
+			div,
+			span {
+				display: inline-block;
+			}
+		}
+		.btn {
+			cursor: pointer;
+			font-size: 25px;
+			width: 3%;
+			i {
+				color: $btnColor;
+			}
+		}
+		.tab1,
+		.tab2,
+		.tab3 {
+			cursor: pointer;
+			color: $txtColor;
+			font-size: 17px;
+			width: 30%;
+			padding-bottom: 10px;
+			position: relative;
+		}
+		.tab {
+			cursor: pointer;
+			color: $txtColor;
+			font-size: 17px;
+			width: 30%;
+			padding-bottom: 10px;
+		}
+	}
+	& .#{$className}_weeksWrap {
+		display: none;
+	}
+	.#{$className}_days {
+		// kjb
+		display: none;
+		height: 62px; // margin: 10px 0;
+		.date,
+		.sell,
+		.group {
+			width: 50%;
+			float: left;
+			text-align: left;
+			font-size: 16px;
+			color: #666;
+		}
+		.status,
+		.price {
+			text-align: right;
+			float: left;
+			width: 50%;
+			font-size: 16px;
+			padding-right: 10px;
+		}
+		.group {
+			position: absolute;
+			display: inline-block;
+			left: 21%;
+			font-weight: 400;
+			padding-top: 3px;
+		}
+		.sell {
+			font-weight: 400;
+			position: absolute;
+			display: inline-block;
+			left: 12%;
+			padding-top: 3px;
+		}
+		.price {
+			position: absolute;
+			right: 0%;
+			bottom: 28%;
+			color: #e10500;
+		}
+		.date {
+			font-size: 30px;
+			padding-left: 15px;
+			padding-top: 0px;
+		}
+		.status {
+			color: #24a07c;
+		}
+	} // kjb
+	.hasData {
+		display: block;
+	}
+	.weekDay {
+		width: 100px;
+		height: 30px;
+		top: 68%;
+		left: -3%;
+		color: #666;
+		position: absolute;
+	}
+	.#{$className}_days.disabled {
+		display: none;
+	}
 }
