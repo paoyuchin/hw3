@@ -1,29 +1,28 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
+import DayNode from '../DayNode';
 import style from '../../App.scss';
 
-const Board = ({ title }) => (
-  <ul className="calendars_daysWrap">
-    <li className={style['calendars_weeksWrap']}>星期日</li>
-    <li>星期一</li>
-    <li>星期二</li>
-    <li>星期三</li>
-    <li>星期四</li>
-    <li>星期五</li>
-    <li>星期六</li>
-    <li className="calendars_days disabled"> </li>
-    <li className="calendars_days hasData">
-      <div className="date">1</div>
-      <div className="status">候補</div>
-      <div className="sell">可賣：0</div>
-      <div className="group">團位：0</div>
-      <div className="price">$4,999</div>
-    </li>
-  </ul>
-);
-
-Board.propTypes = {
-  title: PropTypes.string,
+const Board = ({ currentNodes }) => {
+  const dayNodes = currentNodes.map((value, i) => (
+    <DayNode key={i} data={value} />
+  ));
+  return (
+    <ul className={style.calendar_weeksWrap}>
+      <span>星期日</span>
+      <span>星期一</span>
+      <span>星期二</span>
+      <span>星期三</span>
+      <span>星期四</span>
+      <span>星期五</span>
+      <span>星期六</span>
+      <ul className={style.calendar_daysWrap}>{dayNodes}</ul>
+    </ul>
+  );
 };
+
+// Board.propTypes = {
+//   title: PropTypes.string,
+// };
 
 export default Board;

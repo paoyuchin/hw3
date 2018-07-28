@@ -45,7 +45,7 @@ $hightLightColor: #ede9dd;
 	cursor: pointer;
 }
 
-.#{$className}.#{$className}_daymode {
+.#{$className}_daymode {
 	width: 50%;
 	height: 680px;
 	text-align: center;
@@ -117,6 +117,9 @@ $hightLightColor: #ede9dd;
 				top: 0;
 				background-color: $greenTagColor;
 				color: white;
+				width:unset;
+				font-size: 13px;
+				font-weight:400;
 			}
 			div {
 				text-align: left;

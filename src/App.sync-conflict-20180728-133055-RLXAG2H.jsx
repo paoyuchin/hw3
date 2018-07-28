@@ -54,14 +54,13 @@ const ModuleDefaults = {
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.option = Object.assign(ModuleDefaults, this.props.config);
+    this.option = ModuleDefaults;
     this.state = {
       error: null,
       isLoaded: false,
       data: [], // 1
     };
     this.data = {};
-    this.state = { currentYearMonth: this.option.initYearMonth };
   }
 
   componentDidMount() {
@@ -69,16 +68,13 @@ class App extends React.Component {
       .then(res => res.json()) // 與fetch回傳的是xml格式 所以要轉成json檔
       .then(
         data => {
-          // prepare this.data
           for (let i = 0; i < data.length; i++) {
             this.addEvent(data[i]); // 讓data的每一個放進當作參數，執行addEvent
           }
-
           // 再轉成json檔
           this.setState({
-            // allYearMonth: this.getAllYearMonth(this.data),
-            // currentNodes: this.getCurrentNodes(this.state.currentYearMonth),
             isLoaded: true,
+            data,
           });
         },
         // Note: it's important to handle errors here
@@ -93,69 +89,17 @@ class App extends React.Component {
       );
   }
 
-  getCurrentNodes(yearMonth) {
-    const nodes = [];
-    const targetYearMonth = moment(yearMonth, 'yyyymm');
-    const events = this.data[targetYearMonth.get('year')][
-      targetYearMonth.get('month')
-    ];
-    const monthlyDays = targetYearMonth.daysInMonth();
-    const firstWeekDay = targetYearMonth.startOf('month').get('weekday');
-
-    for (let i = 0; i < 42; i++) {
-      const day = {};
-      const date = i + 1 - firstWeekDay;
-      if (i >= firstWeekDay && date <= monthlyDays) {
-        day.day = date;
-        if (events[date]) {
-          Object.assign(day, events[date]);
-        }
-      }
-      nodes.push(day);
-    }
-    return nodes;
-  }
-
-  getAllYearMonth(allYearMonth) {
-    this.yearMonth = [];
-    for (const year in this.data) {
-      // 把每個key都取出來
-      for (let month in this.data[year]) {
-        month = ('0' + (parseInt(month) + 1)).slice(-2);
-        const ele = {};
-        ele.title = `${year}${month}`;
-        ele.literal = `${year} ${month}月`;
-        this.yearMonth.push(ele);
-      }
-    }
-    return this.yearMonth;
-  }
-
-  getCurrentYearMonthTabs(currentYearMonth) {
-    const allYearMonth = this.getAllYearMonth(this.data);
-    const YearMonthTabsArr = [];
-    allYearMonth.push({ title: '', literal: '' });
-    allYearMonth.unshift({ title: '', literal: '' });
-    const resultCurrentYearMonth = [];
-    for (let i = 0; i < allYearMonth.length; i++) {
-      if (allYearMonth[i].title === currentYearMonth) {
-        resultCurrentYearMonth.push(
-          allYearMonth[i - 1],
-          allYearMonth[i],
-          allYearMonth[i + 1],
-        );
-      }
-    }
-    console.log(resultCurrentYearMonth);
-    return resultCurrentYearMonth;
-  }
-
   addEvent(event) {
+    // 按照 年月日，放資料，一個年月日一筆, 我們希望,資料結構可以 選某年 就得到該年的所有月,一路到最裡面都是物件,this.data就是最上層的物件,
+    // this.data[year] 就是看year是多少, 取該year的全部month, 會再取到一個物件
+    // 每一筆的data[i]被傳進來後，是物件後 也就是每一筆的資料，去分析，用moment的物件去整理資料
     const date = moment(event.date);
     const year = date.get('year');
     const month = date.get('month');
     const day = date.get('date');
     const dataKeySetting = this.option.dataKeySetting;
+    // 設定key value，因為不同資料的keu value都不一樣
+    // 以下，中括號是放變數的地方
     // 每一筆key的guaranteed = this.option.dataKeySetting的guaranteed的value 也就是"key"
     event.guaranteed = event[dataKeySetting.guaranteed];
     event.status = event[dataKeySetting.status];
@@ -171,6 +115,9 @@ class App extends React.Component {
     }
     if (!this.data[year][month][day]) {
       this.data[year][month][day] = event;
+      // console.log(event)
+      // console.log(this.data[year][month][day]);
+      // debugger;
     } else {
       // already has event
       // 去比對資料當有資料相同一筆的時後
@@ -202,20 +149,13 @@ class App extends React.Component {
   }
 
   render() {
-    if (this.state.isLoaded) {
-      const { currentYearMonth } = this.state;
-      return (
-        <div className={style.calendar_daymode}>
-          <ControlTab
-            currentYearMonthTabs={this.getCurrentYearMonthTabs(
-              currentYearMonth,
-            )}
-          />
-          <Board currentNodes={this.getCurrentNodes(currentYearMonth)} />
-        </div>
-      );
-    }
-    return <div>Loading...</div>;
+    const { shit } = this.state;
+    return (
+      <div>
+        <ControlTab title={shit} />
+        <Board />
+      </div>
+    );
   }
 }
 // App.js this.state 全部的資料 Obj (this.data)
