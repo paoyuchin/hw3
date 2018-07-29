@@ -1,5 +1,6 @@
 * {
-	box-sizing: border-box; // outline: 1px solid red;
+	box-sizing: border-box; 
+	// outline: 1px solid red;
 	text-align: center;
 	border-spacing: 0;
 	margin: 0;
@@ -152,7 +153,7 @@ $hightLightColor: #ede9dd;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-.#{$className}.#{$className}_listmode {
+.#{$className}_listmode {
 	width: 50%;
 	text-align: center;
 	border: 1px solid lightgray;
@@ -242,6 +243,7 @@ $hightLightColor: #ede9dd;
 			display: inline-block;
 			left: 12%;
 			padding-top: 3px;
+top:0;
 		}
 		.price {
 			position: absolute;

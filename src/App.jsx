@@ -4,6 +4,8 @@ import moment from 'moment/src/moment';
 import ControlTab from './components/ControlTab';
 import Board from './components/Board';
 import style from './App.scss';
+import classnames from 'classnames';
+
 
 const ModuleDefaults = {
   dataSource: [
@@ -61,7 +63,7 @@ class App extends React.Component {
       data: [], // 1
     };
     this.data = {};
-    this.state = { currentYearMonth: this.option.initYearMonth };
+    this.state = { currentYearMonth: this.option.initYearMonth, dayState: true };
   }
 
   componentDidMount() {
@@ -197,6 +199,14 @@ class App extends React.Component {
     }
   }
 
+  focused(node) {
+    if (node) {
+      this.setState(() => ({
+        currentNode: node,
+      }));
+    }
+  }
+
   handleClick(target) {
     let currentYearMonth = this.state.currentYearMonth;
     const allYearMonth = this.getAllYearMonth();
@@ -211,18 +221,33 @@ class App extends React.Component {
     this.setState(Object.assign(this.state, { currentYearMonth }));
   }
 
+  switchBtn() {
+    this.setState(prevState => ({
+      dayState: !prevState.dayState,
+    }));
+  }
+  
   render() {
     if (this.state.isLoaded) {
-      const { currentYearMonth } = this.state;
+      const { currentYearMonth, currentNode, dayState } = this.state;
+      let modeClass = {};
+      modeClass[style.calendar_daymode] = dayState;
+      modeClass[style.calendar_listmode] = !dayState;
+      const btnClassName = classnames(modeClass);
       return (
-        <div className={style.calendar_daymode}>
+        <div className={btnClassName}>
+          <div onClick={() => this.switchBtn()} className={style.switchBtn}>換</div>
           <ControlTab
             currentYearMonthTabs={this.getCurrentYearMonthTabs(
               currentYearMonth,
             )}
             handleClick={target => this.handleClick(target)}
           />
-          <Board currentNodes={this.getCurrentNodes(currentYearMonth)} />
+          <Board
+            currentNodes={this.getCurrentNodes(currentYearMonth)}
+            focused={node => this.focused(node)}
+            currentNode={currentNode}
+          />
         </div>
       );
     }
