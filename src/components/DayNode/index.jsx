@@ -7,6 +7,9 @@ const DayNode = ({ data }) => {
   let disabled = '';
   let GuaranteedTripTag = '';
   let tag = '';
+  clicked(){
+    console.log('aa')
+  };
   if (data.status) {
     hasData = style.hasData;
     data.total = '團位' + data.total;
@@ -20,8 +23,9 @@ const DayNode = ({ data }) => {
     tag = '保證出團';
     GuaranteedTripTag = style.GuaranteedTripTag;
   }
+ 
   return (
-    <li className={`${style.calendar_days} ${hasData} ${disabled}`}>
+    <li onClick={() =>clicked()} className={`${style.calendar_days} ${hasData} ${disabled}`}>
       <div className={style.date}>{data.day}</div>
       <div className={style.status}>{data.status}</div>
       <div className={style.total}>{data.total}</div>

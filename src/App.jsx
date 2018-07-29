@@ -73,7 +73,6 @@ class App extends React.Component {
           for (let i = 0; i < data.length; i++) {
             this.addEvent(data[i]); // 讓data的每一個放進當作參數，執行addEvent
           }
-
           // 再轉成json檔
           this.setState({
             // allYearMonth: this.getAllYearMonth(this.data),
@@ -94,21 +93,20 @@ class App extends React.Component {
   }
 
   getCurrentNodes(yearMonth) {
-    const nodes = [];
-    const targetYearMonth = moment(yearMonth, 'yyyymm');
+    let nodes = [];
+    const targetYearMonth = moment(yearMonth, 'YYYYMM');
     const events = this.data[targetYearMonth.get('year')][
       targetYearMonth.get('month')
     ];
     const monthlyDays = targetYearMonth.daysInMonth();
     const firstWeekDay = targetYearMonth.startOf('month').get('weekday');
-
     for (let i = 0; i < 42; i++) {
-      const day = {};
+      let day = {};
       const date = i + 1 - firstWeekDay;
       if (i >= firstWeekDay && date <= monthlyDays) {
         day.day = date;
         if (events[date]) {
-          Object.assign(day, events[date]);
+          day = Object.assign(day, events[date]);
         }
       }
       nodes.push(day);
@@ -116,24 +114,23 @@ class App extends React.Component {
     return nodes;
   }
 
-  getAllYearMonth(allYearMonth) {
-    this.yearMonth = [];
+  getAllYearMonth() {
+    const yearMonth = [];
     for (const year in this.data) {
       // 把每個key都取出來
       for (let month in this.data[year]) {
         month = ('0' + (parseInt(month) + 1)).slice(-2);
         const ele = {};
         ele.title = `${year}${month}`;
-        ele.literal = `${year} ${month}月`;
-        this.yearMonth.push(ele);
+        ele.literal = `${year}年 ${month}月`;
+        yearMonth.push(ele);
       }
     }
-    return this.yearMonth;
+    return yearMonth;
   }
 
   getCurrentYearMonthTabs(currentYearMonth) {
-    const allYearMonth = this.getAllYearMonth(this.data);
-    const YearMonthTabsArr = [];
+    const allYearMonth = this.getAllYearMonth();
     allYearMonth.push({ title: '', literal: '' });
     allYearMonth.unshift({ title: '', literal: '' });
     const resultCurrentYearMonth = [];
@@ -146,7 +143,6 @@ class App extends React.Component {
         );
       }
     }
-    console.log(resultCurrentYearMonth);
     return resultCurrentYearMonth;
   }
 
@@ -201,6 +197,20 @@ class App extends React.Component {
     }
   }
 
+  handleClick(target) {
+    let currentYearMonth = this.state.currentYearMonth;
+    const allYearMonth = this.getAllYearMonth();
+    let thisIndex;
+    for (let i = 0; i < allYearMonth.length; i++) {
+      if (allYearMonth[i].title === currentYearMonth) {
+        thisIndex = i;
+      }
+    }
+    currentYearMonth = allYearMonth[thisIndex + target].title;
+
+    this.setState(Object.assign(this.state, { currentYearMonth }));
+  }
+
   render() {
     if (this.state.isLoaded) {
       const { currentYearMonth } = this.state;
@@ -210,6 +220,7 @@ class App extends React.Component {
             currentYearMonthTabs={this.getCurrentYearMonthTabs(
               currentYearMonth,
             )}
+            handleClick={target => this.handleClick(target)}
           />
           <Board currentNodes={this.getCurrentNodes(currentYearMonth)} />
         </div>
