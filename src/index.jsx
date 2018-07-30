@@ -23,6 +23,11 @@ const customSettings = {
   },
 };
 ReactDOM.render(
-  <App config={customSettings} />,
+  <App
+    ref={app => {
+      window.app = app;
+    }}
+    config={customSettings}
+  />,
   document.getElementById('app'),
 );

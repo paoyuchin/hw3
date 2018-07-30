@@ -19,8 +19,8 @@ const Board = ({ currentNodes, currentNode, focused }) => {
         <span>星期五</span>
         <span>星期六</span>
       </ul>
-      <ul className={style.calendar_daysWrap}>{dayNodes}</ul>  
-    </div>  
+      <ul className={style.calendar_daysWrap}>{dayNodes}</ul>
+    </div>
   );
 };
 

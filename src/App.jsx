@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
 import moment from 'moment/src/moment';
+import classnames from 'classnames';
 import ControlTab from './components/ControlTab';
 import Board from './components/Board';
 import style from './App.scss';
-import classnames from 'classnames';
-
 
 const ModuleDefaults = {
   dataSource: [
@@ -63,7 +62,21 @@ class App extends React.Component {
       data: [], // 1
     };
     this.data = {};
-    this.state = { currentYearMonth: this.option.initYearMonth, dayState: true };
+    this.state = {
+      currentYearMonth: this.option.initYearMonth,
+      dayState: true,
+    };
+  }
+
+  nextMonth() {
+    this.handleClick(1);
+  }
+
+  inputData(data) {
+    for (let i = 0; i < data.length; i++) {
+      this.addEvent(data[i]); // 讓data的每一個放進當作參數，執行addEvent
+    }
+    this.forceUpdate();
   }
 
   componentDidMount() {
@@ -94,8 +107,9 @@ class App extends React.Component {
       );
   }
 
+
   getCurrentNodes(yearMonth) {
-    let nodes = [];
+    const nodes = [];
     const targetYearMonth = moment(yearMonth, 'YYYYMM');
     const events = this.data[targetYearMonth.get('year')][
       targetYearMonth.get('month')
@@ -200,6 +214,7 @@ class App extends React.Component {
   }
 
   focused(node) {
+    // console.log(node);
     if (node) {
       this.setState(() => ({
         currentNode: node,
@@ -217,8 +232,11 @@ class App extends React.Component {
       }
     }
     currentYearMonth = allYearMonth[thisIndex + target].title;
-
-    this.setState(Object.assign(this.state, { currentYearMonth }));
+    //bon
+    // this.setState(Object.assign(this.state, { currentYearMonth }));
+    this.setState(() => ({
+      currentYearMonth :currentYearMonth
+    }))
   }
 
   switchBtn() {
@@ -226,17 +244,20 @@ class App extends React.Component {
       dayState: !prevState.dayState,
     }));
   }
-  
+
   render() {
     if (this.state.isLoaded) {
       const { currentYearMonth, currentNode, dayState } = this.state;
-      let modeClass = {};
+      const modeClass = {};
       modeClass[style.calendar_daymode] = dayState;
       modeClass[style.calendar_listmode] = !dayState;
       const btnClassName = classnames(modeClass);
+      //245 
       return (
         <div className={btnClassName}>
-          <div onClick={() => this.switchBtn()} className={style.switchBtn}>換</div>
+          <div onClick={() => this.switchBtn()} className={style.switchBtn}>
+            換
+          </div>
           <ControlTab
             currentYearMonthTabs={this.getCurrentYearMonthTabs(
               currentYearMonth,
@@ -254,6 +275,6 @@ class App extends React.Component {
     return <div>Loading...</div>;
   }
 }
-// App.js this.state 全部的資料 Obj (this.data)
-// setState當月的資料
-export default hot(module)(App);
+
+//export default hot(module)(App);
+export default App;
